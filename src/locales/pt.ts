@@ -2,18 +2,17 @@ export const pt = {
   nav: {
     home: "Início",
     apartments: "Procedimentos",
-    amenities: "Serviços",
+    blog: "Blog",
     gallery: "Galeria",
     contact: "Contato",
     bookNow: "Agendar Consulta"
   },
   hero: {
-    subtitle: "CLÍNICA ODONTOLÓGICA DE EXCELÊNCIA",
+    subtitle: "VitallCheck-Up",
     title: "Seu Sorriso é Nossa Prioridade",
-    description: "Oferecemos tratamentos odontológicos completos com tecnologia de ponta e profissionais especializados, garantindo o melhor cuidado para sua saúde bucal.",
+    description: "Tratamentos odontológicos modernos e personalizados para toda a família. Tecnologia de ponta, conforto e excelência em cada consulta.",
     bookStay: "Agendar Consulta",
-    exploreApartments: "Nossos Procedimentos",
-    scrollDown: "Role para Baixo"
+    exploreApartments: "Nossos Procedimentos"
   },
   footer: {
     description: "Clínica odontológica especializada em tratamentos de alta qualidade, oferecendo cuidados personalizados para toda a família em um ambiente moderno e acolhedor.",
@@ -98,7 +97,7 @@ export const pt = {
       }
     },
     cta: {
-      title: "Pronto Para Cuidar do Seu Sorriso?",
+      title: "Sorrir com confiança é Vitall",
       description: "Agende sua consulta e descubra como podemos transformar sua saúde bucal com cuidado profissional e dedicado.",
       bookNow: "Agendar Agora"
     }

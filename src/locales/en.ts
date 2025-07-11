@@ -2,18 +2,17 @@ export const en = {
   nav: {
     home: "Home",
     apartments: "Apartments",
-    amenities: "Amenities",
+    blog: "Blog",
     gallery: "Gallery",
     contact: "Contact",
     bookNow: "Book Now"
   },
   hero: {
-    subtitle: "BEACHFRONT LUXURY ACCOMMODATION",
-    title: "Experience Seaside Tranquility",
-    description: "Discover our exclusive collection of luxury beachfront apartments and hotel rooms, offering unparalleled comfort and breathtaking sea views.",
-    bookStay: "Book Your Stay",
-    exploreApartments: "Explore Apartments",
-    scrollDown: "Scroll Down"
+    subtitle: "VitallCheck-Up",
+    title: "Your Smile is Our Priority",
+    description: "Modern and personalized dental treatments for the whole family. Cutting-edge technology, comfort and excellence in every consultation.",
+    bookStay: "Book Appointment",
+    exploreApartments: "Our Procedures"
   },
   footer: {
     description: "Luxurious beachfront apartments and hotel rooms with stunning sea views, offering the perfect blend of comfort and elegance for your dream vacation.",
@@ -206,7 +205,7 @@ export const en = {
       name: "Name",
       email: "Email",
       phone: "Phone",
-      address: "Address", 
+      address: "Address",
       city: "City",
       country: "Country",
       specialRequests: "Special Requests",

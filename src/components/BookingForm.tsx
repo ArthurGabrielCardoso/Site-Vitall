@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Check, CalendarIcon, Users } from "lucide-react";
+import { CalendarIcon, User, Phone, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -17,61 +17,120 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function BookingForm() {
   const { t } = useLanguage();
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
-  const [adults, setAdults] = useState("2");
-  const [children, setChildren] = useState("0");
-  const [submitted, setSubmitted] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [procedimento, setProcedimento] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would send the booking data to a server
-    console.log("Booking submitted:", { startDate, endDate, adults, children });
-    setSubmitted(true);
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setSubmitted(false);
-    }, 3000);
+    // Create WhatsApp message with form data
+    const data = selectedDate ? format(selectedDate, "dd/MM/yyyy") : "";
+    const mensagem = `Olá! Vim pelo site e gostaria de agendar uma consulta.%0A%0ANome: ${nome}%0ATelefone: ${telefone}%0AProcedimento: ${procedimento}%0AData preferida: ${data}%0A%0APode me ajudar?`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=5511934550921&text=${mensagem}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className="glass-card p-6 space-y-6 animate-fade-in [animation-delay:200ms]"
     >
-      <h3 className="text-2xl font-bold text-center mb-6">{t.bookingForm.title}</h3>
-      
+      <h3 className="text-2xl font-bold text-center mb-6">Agendar Consulta</h3>
+
       <div className="space-y-4">
+        {/* Nome */}
+        <div className="space-y-2">
+          <label htmlFor="nome" className="block text-sm font-medium">
+            Nome Completo
+          </label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="nome"
+              type="text"
+              placeholder="Seu nome completo"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              className="pl-10"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Telefone */}
+        <div className="space-y-2">
+          <label htmlFor="telefone" className="block text-sm font-medium">
+            Telefone
+          </label>
+          <div className="relative">
+            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="telefone"
+              type="tel"
+              placeholder="(11) 99999-9999"
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
+              className="pl-10"
+              required
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Check-in Date */}
+          {/* Procedimento */}
           <div className="space-y-2">
-            <label htmlFor="check-in" className="block text-sm font-medium">
-              {t.bookingForm.checkIn}
+            <label htmlFor="procedimento" className="block text-sm font-medium">
+              Procedimento Desejado
+            </label>
+            <Select value={procedimento} onValueChange={setProcedimento} required>
+              <SelectTrigger id="procedimento" className="w-full">
+                <SelectValue placeholder="Selecione o procedimento" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="limpeza">Limpeza e Profilaxia</SelectItem>
+                <SelectItem value="consulta">Consulta de Avaliação</SelectItem>
+                <SelectItem value="clareamento">Clareamento Dental</SelectItem>
+                <SelectItem value="restauracao">Restauração</SelectItem>
+                <SelectItem value="canal">Tratamento de Canal</SelectItem>
+                <SelectItem value="implante">Implante Dentário</SelectItem>
+                <SelectItem value="ortodontia">Ortodontia</SelectItem>
+                <SelectItem value="protese">Prótese Dentária</SelectItem>
+                <SelectItem value="urgencia">Urgência</SelectItem>
+                <SelectItem value="outro">Outro</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Data Preferida */}
+          <div className="space-y-2">
+            <label htmlFor="data" className="block text-sm font-medium">
+              Data Preferida
             </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  id="check-in"
+                  id="data"
                   variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal",
-                    !startDate && "text-muted-foreground"
+                    !selectedDate && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate ? format(startDate, "PPP") : <span>{t.bookingForm.selectDate}</span>}
+                  {selectedDate ? format(selectedDate, "dd/MM/yyyy") : <span>Selecionar data</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
-                  selected={startDate}
-                  onSelect={setStartDate}
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
                   initialFocus
                   disabled={(date) => date < new Date()}
                   className="pointer-events-auto"
@@ -79,93 +138,12 @@ export default function BookingForm() {
               </PopoverContent>
             </Popover>
           </div>
-          
-          {/* Check-out Date */}
-          <div className="space-y-2">
-            <label htmlFor="check-out" className="block text-sm font-medium">
-              {t.bookingForm.checkOut}
-            </label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  id="check-out"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !endDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {endDate ? format(endDate, "PPP") : <span>{t.bookingForm.selectDate}</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
-                  initialFocus
-                  disabled={(date) => date < (startDate || new Date())}
-                  className="pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Adults */}
-          <div className="space-y-2">
-            <label htmlFor="adults" className="block text-sm font-medium">
-              {t.bookingForm.adults}
-            </label>
-            <Select value={adults} onValueChange={setAdults}>
-              <SelectTrigger id="adults" className="w-full">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                {[1, 2, 3, 4, 5, 6].map((num) => (
-                  <SelectItem key={num} value={num.toString()}>
-                    {num} {num === 1 ? t.bookingForm.adult : t.bookingForm.adults}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {/* Children */}
-          <div className="space-y-2">
-            <label htmlFor="children" className="block text-sm font-medium">
-              {t.bookingForm.children}
-            </label>
-            <Select value={children} onValueChange={setChildren}>
-              <SelectTrigger id="children" className="w-full">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                {[0, 1, 2, 3, 4].map((num) => (
-                  <SelectItem key={num} value={num.toString()}>
-                    {num} {num === 1 ? t.bookingForm.child : t.bookingForm.children}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
         </div>
       </div>
-      
+
       <Button type="submit" className="w-full btn-primary relative">
-        {submitted ? (
-          <>
-            <Check className="mr-2 h-4 w-4" />
-            {t.bookingForm.bookingConfirmed}
-          </>
-        ) : (
-          <>
-            <Users className="mr-2 h-4 w-4" />
-            {t.bookingForm.checkAvailability}
-          </>
-        )}
+        <Stethoscope className="mr-2 h-4 w-4" />
+        Agendar Consulta
       </Button>
     </form>
   );

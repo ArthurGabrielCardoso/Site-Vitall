@@ -2,18 +2,17 @@ export const it = {
   nav: {
     home: "Home",
     apartments: "Appartamenti",
-    amenities: "Servizi",
+    blog: "Blog",
     gallery: "Galleria",
     contact: "Contatti",
     bookNow: "Prenota Ora"
   },
   hero: {
-    subtitle: "ALLOGGI DI LUSSO SUL MARE",
-    title: "Vivi la Tranquillità del Mare",
-    description: "Scopri la nostra esclusiva collezione di appartamenti di lusso e camere d'albergo sul mare, che offrono comfort impareggiabile e viste mozzafiato sul mare.",
-    bookStay: "Prenota il tuo Soggiorno",
-    exploreApartments: "Esplora gli Appartamenti",
-    scrollDown: "Scorri Giù"
+    subtitle: "VitallCheck-Up",
+    title: "Il Tuo Sorriso è la Nostra Priorità",
+    description: "Trattamenti dentali moderni e personalizzati per tutta la famiglia. Tecnologia all'avanguardia, comfort ed eccellenza in ogni consulto.",
+    bookStay: "Prenota Appuntamento",
+    exploreApartments: "Le Nostre Procedure"
   },
   footer: {
     description: "Appartamenti di lusso sul mare e camere d'albergo con splendide viste sul mare, che offrono il perfetto connubio di comfort ed eleganza per la tua vacanza da sogno.",
