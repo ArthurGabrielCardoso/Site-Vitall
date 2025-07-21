@@ -18,6 +18,19 @@ export default defineConfig(({ mode }) => {
       mode === 'development' &&
       componentTagger(),
     ].filter(Boolean),
+    // Configuração para SPA routing em produção
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            router: ['react-router-dom'],
+          }
+        }
+      }
+    },
+    // Copiar arquivos de configuração para dist
+    publicDir: 'public',
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

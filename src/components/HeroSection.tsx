@@ -61,7 +61,7 @@ export default function HeroSection() {
               {t.hero.bookStay}
             </Button>
             <Button asChild variant="hero" size="lg" className="w-full sm:min-w-[200px] rounded-full transform transition-all duration-300 hover:translate-y-[-2px]">
-              <Link to="/apartments">{t.hero.exploreApartments}</Link>
+              <Link to="/procedimentos">{t.hero.exploreApartments}</Link>
             </Button>
           </div>
         </div>

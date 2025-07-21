@@ -9,7 +9,7 @@ export const pt = {
   },
   hero: {
     subtitle: "VitallCheck-Up",
-    title: "Seu Sorriso é Nossa Prioridade",
+    title: "Sorrir com confiança é Vitall",
     description: "Tratamentos odontológicos modernos e personalizados para toda a família. Tecnologia de ponta, conforto e excelência em cada consulta.",
     bookStay: "Agendar Consulta",
     exploreApartments: "Nossos Procedimentos"
@@ -127,14 +127,10 @@ export const pt = {
     }
   },
   gallery: {
-    title: "Galeria de Fotos",
-    subtitle: "Conheça nossas instalações e equipamentos modernos.",
-    filters: {
-      all: "Todas",
-      exterior: "Instalações",
-      rooms: "Consultórios",
-      amenities: "Equipamentos"
-    }
+    title: "Galeria do Sorriso",
+    subtitle: "Transformações reais, sorrisos autênticos. Veja os resultados incríveis dos nossos tratamentos odontológicos.",
+    photos: "Fotos",
+    videos: "Vídeos"
   },
   booking: {
     title: "Agendar Consulta",

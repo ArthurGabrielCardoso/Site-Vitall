@@ -127,14 +127,10 @@ export const en = {
     }
   },
   gallery: {
-    title: "Photo Gallery",
-    subtitle: "Explore our seaside paradise through captivating imagery.",
-    filters: {
-      all: "All",
-      exterior: "Exterior",
-      rooms: "Rooms",
-      amenities: "Amenities"
-    }
+    title: "Smile Gallery",
+    subtitle: "Real transformations, authentic smiles. See the incredible results of our dental treatments.",
+    photos: "Photos",
+    videos: "Videos"
   },
   booking: {
     title: "Book Your Stay",

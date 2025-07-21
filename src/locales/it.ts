@@ -70,14 +70,10 @@ export const it = {
     }
   },
   gallery: {
-    title: "Galleria Fotografica",
-    subtitle: "Esplora il nostro paradiso sul mare attraverso immagini suggestive.",
-    filters: {
-      all: "Tutti",
-      exterior: "Esterno",
-      rooms: "Camere",
-      amenities: "Servizi"
-    }
+    title: "Galleria del Sorriso",
+    subtitle: "Trasformazioni reali, sorrisi autentici. Guarda i risultati incredibili dei nostri trattamenti odontoiatrici.",
+    photos: "Foto",
+    videos: "Video"
   },
   booking: {
     title: "Prenota il tuo Soggiorno",

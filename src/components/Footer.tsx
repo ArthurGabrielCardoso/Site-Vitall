@@ -31,7 +31,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 { name: t.nav.home, path: "/" },
-                { name: t.nav.apartments, path: "/apartments" },
+                { name: t.nav.apartments, path: "/procedimentos" },
                 { name: t.nav.blog, path: "/blog" },
                 { name: t.nav.gallery, path: "/gallery" },
                 { name: t.nav.contact, path: "/contact" },

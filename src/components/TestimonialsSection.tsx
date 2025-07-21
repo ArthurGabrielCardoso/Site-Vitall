@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Star, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useGoogleReviews, convertGoogleReviewToLocal } from "@/hooks/useGoogleReviews";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 interface Testimonial {
   id: number;
@@ -46,41 +47,12 @@ const fallbackTestimonials: Testimonial[] = [
 
 export default function TestimonialsSection() {
   const { t } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
   const { reviews: googleReviews, loading, error, placeDetails } = useGoogleReviews();
 
   // Usar reviews do Google se disponível, senão usar fallback
   const testimonials: Testimonial[] = googleReviews.length > 0
     ? googleReviews.map((review, index) => convertGoogleReviewToLocal(review, index))
     : fallbackTestimonials;
-
-  const nextTestimonial = () => {
-    if (isAnimating) return;
-
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
-
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 500);
-  };
-
-  const prevTestimonial = () => {
-    if (isAnimating) return;
-
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 500);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(nextTestimonial, 8000);
-    return () => clearInterval(interval);
-  }, [testimonials.length]);
 
   return (
     <section className="section bg-muted py-20">
@@ -101,7 +73,7 @@ export default function TestimonialsSection() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${i < Math.floor(placeDetails.rating || 0) ? "fill-primary text-primary" : "text-muted-foreground"}`}
+                      className={`h-4 w-4 ${i < Math.floor(placeDetails.rating || 0) ? "fill-secondary text-secondary" : "text-muted-foreground"}`}
                     />
                   ))}
                 </div>
@@ -131,109 +103,76 @@ export default function TestimonialsSection() {
           )}
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
-          <div className="relative h-[450px] md:h-[350px]">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={testimonial.id}
-                className={cn(
-                  "absolute inset-0 glass-card p-8 md:p-10 transition-all duration-500",
-                  activeIndex === index
-                    ? "opacity-100 translate-x-0 z-10"
-                    : index < activeIndex
-                      ? "opacity-0 -translate-x-full z-0"
-                      : "opacity-0 translate-x-full z-0"
-                )}
-              >
-                <div className="flex flex-col md:flex-row gap-6 h-full">
-                  <div className="flex flex-col items-center md:items-start">
-                    <div className="rounded-full overflow-hidden w-20 h-20 mb-4 border-2 border-primary">
-                      <img
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          // Fallback se a imagem não carregar
-                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.name)}&background=0ea5e9&color=fff`;
-                        }}
-                      />
+        <div className="relative">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            plugins={[Autoplay({ delay: 4000 })]}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {testimonials.map((testimonial, index) => (
+                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
+                  <div className="animate-fade-in" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
+                    <div className="glass-card p-6 h-full flex flex-col">
+                      {/* Header com avatar e info */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="rounded-full overflow-hidden w-12 h-12 border-2 border-primary flex-shrink-0">
+                          <img
+                            src={testimonial.avatar}
+                            alt={testimonial.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.name)}&background=0ea5e9&color=fff`;
+                            }}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-sm truncate">{testimonial.name}</h4>
+                          <p className="text-xs text-muted-foreground">{testimonial.location}</p>
+                          {testimonial.date && (
+                            <p className="text-xs text-muted-foreground">{testimonial.date}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Rating */}
+                      <div className="flex items-center gap-1 mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${i < testimonial.rating ? "fill-secondary text-secondary" : "text-muted-foreground"}`}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Content */}
+                      <blockquote className="italic text-muted-foreground text-sm leading-relaxed flex-1">
+                        "{testimonial.content}"
+                      </blockquote>
+
+                      {/* Link para Google (se disponível) */}
+                      {testimonial.googleUrl && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-4 text-xs self-start"
+                          onClick={() => window.open(testimonial.googleUrl, '_blank')}
+                        >
+                          <ExternalLink className="h-3 w-3 mr-1" />
+                          Ver no Google
+                        </Button>
+                      )}
                     </div>
-                    <div className="flex mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${i < testimonial.rating ? "fill-primary text-primary" : "text-muted-foreground"}`}
-                        />
-                      ))}
-                    </div>
-                    <h4 className="text-lg font-semibold text-center md:text-left">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground text-center md:text-left">{testimonial.location}</p>
-                    {testimonial.date && (
-                      <p className="text-xs text-muted-foreground text-center md:text-left mt-1">{testimonial.date}</p>
-                    )}
-
-                    {/* Link para ver no Google (se disponível) */}
-                    {testimonial.googleUrl && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-2 text-xs"
-                        onClick={() => window.open(testimonial.googleUrl, '_blank')}
-                      >
-                        <ExternalLink className="h-3 w-3 mr-1" />
-                        Ver no Google
-                      </Button>
-                    )}
                   </div>
-
-                  <div className="flex-1 flex items-center">
-                    <blockquote className="italic text-muted-foreground">
-                      "{testimonial.content}"
-                    </blockquote>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-between mt-8">
-            <button
-              onClick={prevTestimonial}
-              className="p-2 rounded-full bg-card hover:bg-muted border border-border transition-colors"
-              disabled={isAnimating}
-            >
-              <ChevronLeft className="h-5 w-5" />
-              <span className="sr-only">Previous testimonial</span>
-            </button>
-
-            <div className="flex space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    if (isAnimating) return;
-                    setIsAnimating(true);
-                    setActiveIndex(index);
-                    setTimeout(() => setIsAnimating(false), 500);
-                  }}
-                  className={`w-3 h-3 rounded-full transition-all ${activeIndex === index
-                      ? "bg-primary w-6"
-                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                    }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
+                </CarouselItem>
               ))}
-            </div>
-
-            <button
-              onClick={nextTestimonial}
-              className="p-2 rounded-full bg-card hover:bg-muted border border-border transition-colors"
-              disabled={isAnimating}
-            >
-              <ChevronRight className="h-5 w-5" />
-              <span className="sr-only">Next testimonial</span>
-            </button>
-          </div>
+            </CarouselContent>
+            <CarouselPrevious className="-left-4 text-secondary border-secondary/20 hover:bg-secondary hover:text-secondary-foreground" />
+            <CarouselNext className="-right-4 text-secondary border-secondary/20 hover:bg-secondary hover:text-secondary-foreground" />
+          </Carousel>
         </div>
 
         {/* Link para mais avaliações */}
