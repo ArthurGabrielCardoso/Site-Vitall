@@ -19,6 +19,86 @@
 
     gtag('config', 'AW-17464614304');
   </script>
+
+  <!-- Event snippet for Clique de saída conversion page -->
+  <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17464614304/24PuCLP34bkbEKC744dB',
+          'value': 1.0,
+          'currency': 'BRL',
+          'event_callback': callback
+      });
+      return false;
+    }
+
+    // Rastreamento automático de todos os botões e links importantes
+    window.addEventListener('load', function() {
+      // Rastrear cliques em todos os botões
+      document.addEventListener('click', function(e) {
+        var element = e.target;
+
+        // Encontrar o elemento clicável mais próximo (botão ou link)
+        while (element && element !== document) {
+          var tagName = element.tagName ? element.tagName.toLowerCase() : '';
+
+          // Verificar se é um botão
+          if (tagName === 'button' || element.getAttribute('role') === 'button') {
+            gtag('event', 'conversion', {
+              'send_to': 'AW-17464614304/24PuCLP34bkbEKC744dB',
+              'value': 1.0,
+              'currency': 'BRL'
+            });
+            break;
+          }
+
+          // Verificar se é um link
+          if (tagName === 'a') {
+            var href = element.getAttribute('href') || '';
+
+            // Rastrear links externos (que saem do site)
+            if (href.startsWith('http') && !href.includes(window.location.hostname)) {
+              e.preventDefault();
+              gtag_report_conversion(href);
+              break;
+            }
+
+            // Rastrear links de WhatsApp, telefone, email
+            if (href.startsWith('https://wa.me') ||
+                href.startsWith('tel:') ||
+                href.startsWith('mailto:') ||
+                href.includes('whatsapp')) {
+              e.preventDefault();
+              gtag_report_conversion(href);
+              break;
+            }
+
+            // Rastrear links internos importantes (CTAs)
+            if (href.includes('contato') ||
+                href.includes('agendar') ||
+                href.includes('marcar') ||
+                element.textContent.toLowerCase().includes('agendar') ||
+                element.textContent.toLowerCase().includes('contato')) {
+              gtag('event', 'conversion', {
+                'send_to': 'AW-17464614304/24PuCLP34bkbEKC744dB',
+                'value': 1.0,
+                'currency': 'BRL'
+              });
+              // Não prevenir navegação em links internos
+            }
+            break;
+          }
+
+          element = element.parentElement;
+        }
+      });
+    });
+  </script>
 </head>
 
 <body>
